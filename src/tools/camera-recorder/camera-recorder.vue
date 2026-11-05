@@ -12,7 +12,9 @@ const {
   isSupported,
   ensurePermissions,
 } = useDevicesList({
-  requestPermissions: true,
+  // Permissions are requested on mount via our own `requestPermissions` so a missing camera
+  // or a denied permission is handled instead of throwing an unhandled promise rejection
+  requestPermissions: false,
   constraints: { video: true, audio: true },
   onUpdated() {
     refreshCurrentDevices();
@@ -95,6 +97,15 @@ async function requestPermissions() {
   }
 }
 
+onMounted(() => {
+  if (isSupported.value) {
+    requestPermissions();
+  }
+});
+
+// Camera access is only exposed by browsers in a secure context (HTTPS or localhost)
+const isSecureContext = window.isSecureContext;
+
 function downloadMedia({ type, value, createdAt }: Media) {
   const link = document.createElement('a');
   link.href = value;
@@ -106,7 +117,12 @@ function downloadMedia({ type, value, createdAt }: Media) {
 <template>
   <div>
     <c-card v-if="!isSupported">
-      Your browser does not support recording video from camera
+      <template v-if="!isSecureContext">
+        Camera access requires a secure context. Open IT-Tools over HTTPS (or on localhost) to use this tool.
+      </template>
+      <template v-else>
+        Your browser does not support recording video from camera
+      </template>
     </c-card>
 
     <c-card v-else-if="!permissionGranted" text-center>
