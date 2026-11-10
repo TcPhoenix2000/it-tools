@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## Version 2026.11.10-1bc4c73
+
+First release of the TcPhoenix2000 fork (based on CorentinTh/it-tools 2024.10.22-7ca5933).
+
+### Security
+- **random**: all randomness (tokens, passwords, OTP secrets) now uses the Web Crypto CSPRNG instead of Math.random
+- **token-generator**: alphabet was missing N and n; characters are now drawn independently and uniformly
+- **deps**: upgrade vulnerable dependencies and pin patched transitive versions (audit 246 -> 48 advisories, see SECURITY.md)
+- **docker**: non-root nginx on port 8080, OS package upgrades, strict security headers and CSP, healthcheck
+- **ci**: images are scanned with Grype before publishing and ship with SBOM and provenance; actions pinned to SHAs
+
+### Bug fixes
+- **ascii-text-drawer**: fonts are bundled instead of fetched from unpkg (failed over HTTP and offline)
+- **camera-recorder**: no unhandled error without a camera; explains HTTPS requirement
+- **build**: `pnpm build` works on Windows
+
+### Breaking changes
+- The container listens on **8080** instead of 80 (map `-p <host>:8080`)
+- Images are published as `ghcr.io/tcphoenix2000/it-tools`
+
 ## Version 2024.10.22-7ca5933
 
 ### Features
