@@ -3,3 +3,10 @@ playwright-report
 coverage
 dist
 test-results
+.git
+.github
+.vscode
+.idea
+*.log
+.env
+.env.*

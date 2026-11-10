@@ -1,4 +1,4 @@
-import { shuffleString } from '@/utils/random';
+import { randIntFromInterval } from '@/utils/random';
 
 export function createToken({
   withUppercase = true,
@@ -16,11 +16,16 @@ export function createToken({
   alphabet?: string
 }) {
   const allAlphabet = alphabet ?? [
-    withUppercase ? 'ABCDEFGHIJKLMOPQRSTUVWXYZ' : '',
-    withLowercase ? 'abcdefghijklmopqrstuvwxyz' : '',
+    withUppercase ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : '',
+    withLowercase ? 'abcdefghijklmnopqrstuvwxyz' : '',
     withNumbers ? '0123456789' : '',
-    withSymbols ? '.,;:!?./-"\'#{([-|\\@)]=}*+' : '',
+    withSymbols ? '.,;:!?/-"\'#{([|\\@)]=}*+' : '',
   ].join('');
 
-  return shuffleString(allAlphabet.repeat(length)).substring(0, length);
+  if (allAlphabet.length === 0) {
+    return '';
+  }
+
+  // Each character is drawn independently and uniformly from the alphabet using a CSPRNG
+  return Array.from({ length }, () => allAlphabet[randIntFromInterval(0, allAlphabet.length)]).join('');
 }

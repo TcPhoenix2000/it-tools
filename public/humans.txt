@@ -1,4 +1,7 @@
 /* TEAM */
+Maintainer: TcPhoenix2000
+Site: https://github.com/TcPhoenix2000/it-tools
+
+/* ORIGINAL AUTHOR */
 Developer: Corentin Thomasset
 Site: https://github.com/CorentinTh
-Twitter: @cthmsst

@@ -4,6 +4,7 @@ import type { PaletteOption } from './command-palette.types';
 import { useToolStore } from '@/tools/tools.store';
 import { useFuzzySearch } from '@/composable/fuzzySearch';
 import { useStyleStore } from '@/stores/style.store';
+import { config } from '@/config';
 
 import SunIcon from '~icons/mdi/white-balance-sunny';
 import GithubIcon from '~icons/mdi/github';
@@ -48,7 +49,7 @@ export const useCommandPaletteStore = defineStore('command-palette', () => {
     },
     {
       name: 'Github repository',
-      href: 'https://github.com/CorentinTh/it-tools',
+      href: config.app.repoUrl,
       category: 'External',
       description: 'View the source code of it-tools on Github.',
       keywords: ['github', 'repo', 'repository', 'source', 'code'],
@@ -57,7 +58,7 @@ export const useCommandPaletteStore = defineStore('command-palette', () => {
     {
       name: 'Report a bug or an issue',
       description: 'Report a bug or an issue to help improve it-tools.',
-      href: 'https://github.com/CorentinTh/it-tools/issues/new/choose',
+      href: `${config.app.repoUrl}/issues/new/choose`,
       category: 'Actions',
       keywords: ['report', 'issue', 'bug', 'problem', 'error'],
       icon: BugIcon,

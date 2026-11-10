@@ -5,36 +5,66 @@
 </picture>
 
 <p align="center">
-Useful tools for developer and people working in IT. <a href="https://it-tools.tech">Try it!</a>
+Useful tools for developer and people working in IT. Self-hosted, security-hardened build maintained by <a href="https://github.com/TcPhoenix2000">TcPhoenix2000</a>.
 </p>
+
+> This is a maintained fork of [CorentinTh/it-tools](https://github.com/CorentinTh/it-tools) by Corentin Thomasset (GPL-3.0).
+> It adds dependency security updates, a hardened container image and a vulnerability-gated release pipeline.
 
 ## Functionalities and roadmap
 
-Please check the [issues](https://github.com/CorentinTh/it-tools/issues) to see if some feature listed to be implemented.
+Please check the [issues](https://github.com/TcPhoenix2000/it-tools/issues) to see if some feature listed to be implemented.
 
-You have an idea of a tool? Submit a [feature request](https://github.com/CorentinTh/it-tools/issues/new/choose)!
+You have an idea of a tool? Submit a [feature request](https://github.com/TcPhoenix2000/it-tools/issues/new/choose)!
 
 ## Self host
 
-Self host solutions for your homelab
+Self host solutions for your homelab. The image runs nginx as a **non-root** user and listens on port **8080** inside the container.
 
-**From docker hub:**
-
-```sh
-docker run -d --name it-tools --restart unless-stopped -p 8080:80 corentinth/it-tools:latest
-```
-
-**From github packages:**
+**From GitHub packages:**
 
 ```sh
-docker run -d --name it-tools --restart unless-stopped -p 8080:80 ghcr.io/corentinth/it-tools:latest
+docker run -d --name it-tools --restart unless-stopped -p 8080:8080 ghcr.io/tcphoenix2000/it-tools:latest
 ```
 
-**Other solutions:**
+**From Docker Hub** (when published there):
 
-- [Cloudron](https://www.cloudron.io/store/tech.ittools.cloudron.html)
-- [Tipi](https://www.runtipi.io/docs/apps-available)
-- [Unraid](https://unraid.net/community/apps?q=it-tools)
+```sh
+docker run -d --name it-tools --restart unless-stopped -p 8080:8080 <dockerhub-user>/it-tools:latest
+```
+
+**Docker Compose:**
+
+```yaml
+services:
+  it-tools:
+    image: ghcr.io/tcphoenix2000/it-tools:latest
+    container_name: it-tools
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+```
+
+Some tools (like the camera recorder) only work when the site is served over **HTTPS** or from `localhost`, so put it behind a TLS reverse proxy for full functionality.
+
+### Image security
+
+- Every image is scanned with [Grype](https://github.com/anchore/grype) before it is pushed; the release fails on any fixable high or critical vulnerability.
+- Images ship with SBOM and build-provenance attestations.
+- Strict HTTP security headers (Content-Security-Policy, X-Frame-Options, etc.) are set by nginx.
+
+### Release pipeline
+
+- `nightly` tag: built daily from `main` (when there were new commits).
+- `latest` and `<version>` tags: built when a `v*.*.*` git tag is pushed (`pnpm release`).
+- Images go to `ghcr.io/<owner>/it-tools`, plus Docker Hub when the `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets are set.
 
 ## Contribute
 
@@ -111,22 +141,11 @@ pnpm run script:create:tool my-tool-name
 
 It will create a directory in `src/tools` with the correct files, and a the import in `src/tools/index.ts`. You will just need to add the imported tool in the proper category and develop the tool.
 
-## Contributors
-
-Big thanks to all the people who have already contributed!
-
-[![contributors](https://contrib.rocks/image?repo=corentinth/it-tools&refresh=1)](https://github.com/corentinth/it-tools/graphs/contributors)
-
 ## Credits
 
-Coded with ❤️ by [Corentin Thomasset](https://corentin.tech?utm_source=it-tools&utm_medium=readme).
+IT-Tools was created and is maintained upstream by [Corentin Thomasset](https://corentin.tech) and [its contributors](https://github.com/CorentinTh/it-tools/graphs/contributors). If you like it, consider [supporting the original author](https://www.buymeacoffee.com/cthmsst).
 
-This project is continuously deployed using [vercel.com](https://vercel.com).
-
-Contributor graph is generated using [contrib.rocks](https://contrib.rocks/preview?repo=corentinth/it-tools).
-
-<a href="https://www.producthunt.com/posts/it-tools?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-it&#0045;tools" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=345793&theme=light" alt="IT&#0032;Tools - Collection&#0032;of&#0032;handy&#0032;online&#0032;tools&#0032;for&#0032;devs&#0044;&#0032;with&#0032;great&#0032;UX | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-<a href="https://www.producthunt.com/posts/it-tools?utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-it&#0045;tools" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=345793&theme=light&period=daily" alt="IT&#0032;Tools - Collection&#0032;of&#0032;handy&#0032;online&#0032;tools&#0032;for&#0032;devs&#0044;&#0032;with&#0032;great&#0032;UX | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+This fork is maintained by [TcPhoenix2000](https://github.com/TcPhoenix2000).
 
 ## License
 

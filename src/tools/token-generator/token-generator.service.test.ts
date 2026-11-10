@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createToken } from './token-generator.service';
 
 describe('token-generator', () => {
@@ -93,6 +93,33 @@ describe('token-generator', () => {
 
       expect(token).toHaveLength(256);
       expect(token).toMatch(/^[a-zA-Z]+$/);
+    });
+
+    it('can produce every letter of the alphabet (regression: N and n were missing)', () => {
+      const token = createToken({
+        withLowercase: true,
+        withUppercase: true,
+        withNumbers: false,
+        withSymbols: false,
+        length: 5000,
+      });
+
+      for (const letter of 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') {
+        expect(token).toContain(letter);
+      }
+    });
+
+    it('uses a cryptographically secure random source, not Math.random', () => {
+      const mathRandomSpy = vi.spyOn(Math, 'random');
+      const cryptoSpy = vi.spyOn(crypto, 'getRandomValues');
+
+      createToken({ length: 32 });
+
+      expect(mathRandomSpy).not.toHaveBeenCalled();
+      expect(cryptoSpy).toHaveBeenCalled();
+
+      mathRandomSpy.mockRestore();
+      cryptoSpy.mockRestore();
     });
   });
 });

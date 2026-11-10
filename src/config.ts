@@ -14,6 +14,12 @@ export const config = figue({
       default: '',
       env: 'VITE_VERCEL_GIT_COMMIT_SHA',
     },
+    repoUrl: {
+      doc: 'Source repository url, used for GitHub / issue / version links',
+      format: 'string',
+      default: 'https://github.com/TcPhoenix2000/it-tools',
+      env: 'VITE_REPO_URL',
+    },
     baseUrl: {
       doc: 'Application base url',
       format: 'string',

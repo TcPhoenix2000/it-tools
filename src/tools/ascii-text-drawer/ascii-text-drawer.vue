@@ -34,15 +34,15 @@ watchEffect(async () => {
   // Read all reactive deps synchronously so watchEffect tracks them before the first await
   const currentRenderId = ++renderId;
   const text = input.value;
-  const options: figlet.Options = {
-    font: font.value as figlet.Fonts,
+  const options = {
+    font: font.value,
     width: width.value,
     whitespaceBreak: true,
   };
 
   processing.value = true;
   try {
-    await ensureFontLoaded(options.font as string);
+    await ensureFontLoaded(options.font);
     const result = await (new Promise<string>((resolve, reject) =>
       figlet.text(text, options,
         (err, text) => {
