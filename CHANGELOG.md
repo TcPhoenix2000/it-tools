@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## Version 2026.11.10-1bc4c73
+## Version 2026.11.10-fa3933e
 
 First release of the TcPhoenix2000 fork (based on CorentinTh/it-tools 2024.10.22-7ca5933).
 
