@@ -37,19 +37,22 @@ jobs:
 
       - name: Compute image names
         id: names
+        # metadata-action rejects empty image names, so the Docker Hub image is only listed when configured
         run: |
-          echo "ghcr=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/it-tools" >> "$GITHUB_OUTPUT"
-          if [ -n "$DOCKERHUB_USERNAME" ]; then
-            echo "dockerhub=docker.io/${DOCKERHUB_USERNAME,,}/it-tools" >> "$GITHUB_OUTPUT"
-          fi
+          {
+            echo "images<<EOF"
+            echo "ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/it-tools"
+            if [ -n "$DOCKERHUB_USERNAME" ]; then
+              echo "docker.io/${DOCKERHUB_USERNAME,,}/it-tools"
+            fi
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         with:
-          images: |
-            ${{ steps.names.outputs.ghcr }}
-            name=${{ steps.names.outputs.dockerhub }},enable=${{ steps.names.outputs.dockerhub != '' }}
+          images: ${{ steps.names.outputs.images }}
           tags: ${{ inputs.tags }}
           labels: |
             org.opencontainers.image.title=it-tools
