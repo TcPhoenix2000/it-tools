@@ -9,7 +9,8 @@ on:
       - main
 jobs:
   test:
-    timeout-minutes: 10
+    # browser install with system deps alone can take ~10 min on fresh runners
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     strategy:
       matrix:
