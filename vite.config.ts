@@ -56,6 +56,10 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       strategies: 'generateSW',
+      workbox: {
+        // PDF editor vendor assets (OCR engine, language data, pdf.js data) are large and loaded on demand
+        globIgnores: ['**/vendor/**'],
+      },
       manifest: {
         name: 'IT Tools',
         description: 'Aggregated set of useful tools for developers.',
@@ -100,9 +104,12 @@ export default defineConfig({
   ],
   base: baseUrl,
   resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
+    alias: [
+      { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
+      // The package's "es" build uses JSON import attributes, which Vite 4's esbuild cannot parse;
+      // its prebundled ESM build is equivalent and works in dev and build.
+      { find: /^@cantoo\/pdf-lib$/, replacement: fileURLToPath(new URL('./node_modules/@cantoo/pdf-lib/dist/pdf-lib.esm.js', import.meta.url)) },
+    ],
   },
   define: {
     'import.meta.env.PACKAGE_VERSION': JSON.stringify(process.env.npm_package_version),

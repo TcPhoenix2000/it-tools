@@ -60,6 +60,7 @@ search:
 tools:
   categories:
     favorite-tools: 'Your favorite tools'
+    pdf: PDF
     crypto: Crypto
     converter: Converter
     web: Web
@@ -324,6 +325,10 @@ tools:
   device-information:
     title: Device information
     description: Get information about your current device (screen size, pixel-ratio, user agent, ...)
+
+  pdf-editor:
+    title: PDF editor
+    description: Edit, organize, annotate, sign, fill and create forms, redact, protect, compress, OCR and compare PDF files. Everything runs in your browser; files never leave your device.
 
   pdf-signature-checker:
     title: PDF signature checker
